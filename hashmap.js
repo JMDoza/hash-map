@@ -30,7 +30,7 @@ function HashMap(capacity) {
       console.log("INCREASE BUCKETS");
     }
 
-    let hashCode = hash(key);
+    const hashCode = hash(key);
 
     let index = buckets[hashCode].find(key);
     if (index === null) {
@@ -42,14 +42,30 @@ function HashMap(capacity) {
   };
 
   const get = (key) => {
-    let hashCode = hash(key);
+    const hashCode = hash(key);
 
-    let node = buckets[hashCode].find(key);
-    if (node !== null) {
-      return buckets[hashCode].at(node);
+    let index = buckets[hashCode].find(key);
+    if (index !== null) {
+      return buckets[hashCode].at(index);
     }
 
     return null;
+  };
+
+  const has = (key) => {
+    const hashCode = hash(key);
+    return buckets[hashCode].contains(key);
+  };
+
+  const remove = (key) => {
+    const hashCode = hash(key);
+    const index = buckets[hashCode].find(key);
+    if (index !== null) {
+      entries--;
+      buckets[hashCode].removeAt(index);
+      return true;
+    }
+    return false;
   };
 
   const length = () => {
@@ -60,6 +76,8 @@ function HashMap(capacity) {
     buckets,
     set,
     get,
+    has,
+    remove,
     length,
   };
 }
@@ -78,18 +96,7 @@ test.set("jacket", "blue");
 test.set("kite", "pink");
 test.set("lion", "golden");
 
-// console.log(test.length());
-// console.log(test.get("apple"));
-// console.log(test.get("banana"));
-// console.log(test.get("carrot"));
-// console.log(test.get("dog"));
-// console.log(test.get("elephant"));
-// console.log(test.get("frog"));
-// console.log(test.get("grape"));
-// console.log(test.get("hat"));
-// console.log(test.get("ice cream"));
-// console.log(test.get("jacket"));
-// console.log(test.get("kite"));
-console.log(test.get("lion"));
-test.set("lion", "UNCOLER");
+console.log(test.has("lion"));
+console.log(test.remove("lion"));
+console.log(test.has("lion"));
 console.log(test.get("lion"));
