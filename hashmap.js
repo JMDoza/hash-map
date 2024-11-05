@@ -3,7 +3,7 @@ import { doublyLinkedList } from "./doublylinkedlist.js";
 function HashMap(capacity) {
   const LOADFACTOR = 0.75;
   let buckets = [];
-  let entries = 0;
+  let numOfEntries = 0;
 
   populateBuckets(capacity);
   function populateBuckets(capacity) {
@@ -25,16 +25,15 @@ function HashMap(capacity) {
   };
 
   const set = (key, value) => {
-    if (entries > LOADFACTOR * capacity) {
-      // increaseBuckets();
-      console.log("INCREASE BUCKETS");
+    if (numOfEntries >= LOADFACTOR * capacity) {
+      increaseBuckets();
     }
 
     const hashCode = hash(key);
 
     let index = buckets[hashCode].find(key);
     if (index === null) {
-      entries++;
+      numOfEntries++;
       buckets[hashCode].append(key, value);
     } else {
       buckets[hashCode].replaceAt(key, value, index);
@@ -61,7 +60,7 @@ function HashMap(capacity) {
     const hashCode = hash(key);
     const index = buckets[hashCode].find(key);
     if (index !== null) {
-      entries--;
+      numOfEntries--;
       buckets[hashCode].removeAt(index);
       return true;
     }
@@ -69,11 +68,11 @@ function HashMap(capacity) {
   };
 
   const length = () => {
-    return entries;
+    return numOfEntries;
   };
 
   const clear = () => {
-    entries = 0;
+    numOfEntries = 0;
     buckets = [];
     populateBuckets(capacity);
   };
@@ -92,6 +91,47 @@ function HashMap(capacity) {
     return keyArray;
   };
 
+  const values = () => {
+    let valueArray = [];
+    for (let i = 0; i < capacity; i++) {
+      const list = buckets[i];
+      const listValues = list.getValues();
+      if (listValues.length > 0) {
+        for (const key of listValues) {
+          valueArray.push(key);
+        }
+      }
+    }
+    return valueArray;
+  };
+
+  const entries = () => {
+    let entriesArray = [];
+    for (let i = 0; i < capacity; i++) {
+      const list = buckets[i];
+      const listEntries = list.getEntries();
+      if (listEntries.length > 0) {
+        // for (const key of listEntries) {
+        //   entriesArray.push(key);
+        // }
+        entriesArray.push(listEntries);
+      }
+    }
+    return entriesArray;
+  };
+
+  const increaseBuckets = () => {
+    const hashMapData = entries();
+    capacity *= 2;
+    clear();
+
+    hashMapData.forEach((bucket) => {
+      bucket.forEach((entry) => {
+        set(entry[0], entry[1]);
+      });
+    });
+  };
+
   return {
     buckets,
     set,
@@ -101,6 +141,8 @@ function HashMap(capacity) {
     length,
     clear,
     keys,
+    values,
+    entries,
   };
 }
 
@@ -117,12 +159,6 @@ test.set("ice cream", "white");
 test.set("jacket", "blue");
 test.set("kite", "pink");
 test.set("lion", "golden");
+console.log(test.length());
 
-// console.log(test.has("lion"));
-// console.log(test.remove("lion"));
-// console.log(test.has("lion"));
-// console.log(test.get("lion"));
-
-console.log(test.keys());
-test.clear();
-console.log(test.keys());
+test.set("modasdon", "silver");

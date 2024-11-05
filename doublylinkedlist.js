@@ -86,7 +86,9 @@ function doublyLinkedList() {
   const pop = () => {
     const temp = tail;
     tail = temp.prevNode;
-    tail.nextNode = null;
+    if (tail) {
+      tail.nextNode = null;
+    }
     temp.prevNode = null;
     listSize--;
 
@@ -96,8 +98,11 @@ function doublyLinkedList() {
   const dequeue = () => {
     const temp = head;
     head = temp.nextNode;
-    head.prevNode = null;
+    if (head) {
+      head.prevNode = null;
+    }
     temp.nextNode = null;
+
     listSize--;
 
     return temp;
@@ -225,6 +230,27 @@ function doublyLinkedList() {
     return keyArray;
   };
 
+  const getValues = () => {
+    let valueArray = [];
+    let current = head;
+    while (current !== null) {
+      valueArray.push(current.value);
+      current = current.nextNode;
+    }
+    return valueArray;
+  };
+
+  const getEntries = () => {
+    let entriesArray = [];
+    let current = head;
+    while (current !== null) {
+      const pair = [current.key, current.value];
+      entriesArray.push(pair);
+      current = current.nextNode;
+    }
+    return entriesArray;
+  };
+
   const validIndex = (index) => {
     return size() === 0 || index < 0 || index > size();
   };
@@ -245,6 +271,8 @@ function doublyLinkedList() {
     find,
     toString,
     getKeys,
+    getValues,
+    getEntries,
   };
 }
 
