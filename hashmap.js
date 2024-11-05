@@ -72,6 +72,26 @@ function HashMap(capacity) {
     return entries;
   };
 
+  const clear = () => {
+    entries = 0;
+    buckets = [];
+    populateBuckets(capacity);
+  };
+
+  const keys = () => {
+    let keyArray = [];
+    for (let i = 0; i < capacity; i++) {
+      const list = buckets[i];
+      const listKeys = list.getKeys();
+      if (listKeys.length > 0) {
+        for (const key of listKeys) {
+          keyArray.push(key);
+        }
+      }
+    }
+    return keyArray;
+  };
+
   return {
     buckets,
     set,
@@ -79,6 +99,8 @@ function HashMap(capacity) {
     has,
     remove,
     length,
+    clear,
+    keys,
   };
 }
 
@@ -96,7 +118,11 @@ test.set("jacket", "blue");
 test.set("kite", "pink");
 test.set("lion", "golden");
 
-console.log(test.has("lion"));
-console.log(test.remove("lion"));
-console.log(test.has("lion"));
-console.log(test.get("lion"));
+// console.log(test.has("lion"));
+// console.log(test.remove("lion"));
+// console.log(test.has("lion"));
+// console.log(test.get("lion"));
+
+console.log(test.keys());
+test.clear();
+console.log(test.keys());

@@ -219,8 +219,8 @@ function doublyLinkedList() {
     let keyArray = [];
     let current = head;
     while (current !== null) {
-      current = current.nextNode;
       keyArray.push(current.key);
+      current = current.nextNode;
     }
     return keyArray;
   };
